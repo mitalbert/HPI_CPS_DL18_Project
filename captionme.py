@@ -24,7 +24,7 @@ from tqdm import tqdm
 from torchvision import models                                                                     
 from convcap import convcap
 from vggfeats import Vgg16Feats
-from vgg19bnfeats import Vgg19bnFeats
+#from vgg19bnfeats import Vgg19bnFeats
 from coco_loader import Scale
 from PIL import Image
 #from test_beam import repeat_img
