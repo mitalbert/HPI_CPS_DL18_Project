@@ -33,7 +33,7 @@ def covert_output (input_dic , output_dict):
 
 with open ('output.json') as f1:
     captionme_dict = json.load(f1)
-with open ('input2.json') as f2:
+with open ('input.json') as f2:
     input_data = json.load(f2)
 
 adj_input= conv_input(input_data)
