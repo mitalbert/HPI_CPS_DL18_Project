@@ -32,7 +32,7 @@ from beamsearch import beamsearch
 parser = argparse.ArgumentParser(description='PyTorch Convolutional Image \
     Captioning Model -- Caption Me')
 
-parser.add_argument('--model_dir', help='output directory to save models & results')
+parser.add_argument('--model_dir', default='model', help='output directory to save models & results')
 parser.add_argument('--image_dir', help='directory containing input images \
                     supported formats .png, .jpg, .jpeg, .JPG')
 
