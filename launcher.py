@@ -11,7 +11,7 @@ def conv_input(input_data):
 
 
 def search(name, output):
-    return [element for element in output if getFilename(element['image_name']) == name]
+    return [element for element in output if getFilename(element['img_fn']) == name]
 
 #Get file name from the image_fn which include path
 def getFilename(path):
