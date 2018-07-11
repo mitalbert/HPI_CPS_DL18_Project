@@ -1,5 +1,6 @@
 import json
 import ntpath
+import os
 
 #return from the input file only dict of id & name
 def conv_input(input_data):
@@ -19,23 +20,30 @@ def getFilename(path):
 
 #Adjust the output of Captionme with the submission output format
 def covert_output (input_dic , output_dict):
-    data3=[]
+    results=[]
     for key , value in input_dic.items():
         name = value
         e = search(name, output_dict)
         if (len(e) > 0):
-            data3.append({'image_id' : key , 'caption' : e[0]['caption']})
-    with open('results.json', 'w') as file:
-         file.write(json.dumps(data3))
+            results.append({'image_id' : key , 'caption' : e[0]['caption']})
+            
+    # write the results for submission
+    with open('pred/results.json', 'w') as file:
+         file.write(json.dumps(results))
 
 
-#assert os.path.isfile("/home/mital/docker/sample-submission/input.json"), "Input JSON missing!"
+assert os.path.isfile("input/input.json"), "Input JSON missing!"
 
-with open ('output.json') as f1:
-    captionme_dict = json.load(f1)
-with open ('input.json') as f2:
+with open ('input/input.json') as f2:
     input_data = json.load(f2)
 
+# call the caption generator
+os.system('python2 captionme.py')
+
+# read the output of captionme.py
+with open ('images_captions.json') as f1:
+    captionme_dict = json.load(f1)
+
+# generate the output for submission
 adj_input= conv_input(input_data)
 covert_output(adj_input, captionme_dict)
-
