@@ -25,7 +25,7 @@ def covert_output (input_dic , output_dict):
         e = search(name, output_dict)
         if (len(e) > 0):
             data3.append({'image_id' : key , 'caption' : e[0]['caption']})
-    with open('adj_output.json', 'w') as file:
+    with open('results.json', 'w') as file:
          file.write(json.dumps(data3))
 
 
