@@ -165,6 +165,10 @@ def captionme(args, modelfn):
         num_words = outcaps[j].index('EOS')
       outcap = ' '.join(outcaps[j][:num_words])
       pred_captions.append({'img_fn': img_fn, 'caption': outcap})
+  
+  #save predictions as dictionary
+  with open('images_captions.json', 'w') as file:
+   file.write(json.dumps(pred_captions))
 
   return pred_captions
 
