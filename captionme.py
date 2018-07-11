@@ -182,7 +182,7 @@ def main():
     with open(resfile, 'w') as fp:
       for item in pred_captions:
         fp.write('image: %s, caption: %s\n' % (item['img_fn'], item['caption']))
-    print('[DEBUG] Captions written to file %s' % resfile)
+    print('[DEBUG] Captions written')
   else:
     raise Exception('No checkpoint found %s' % bestmodelfn)
 
