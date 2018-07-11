@@ -33,7 +33,7 @@ parser = argparse.ArgumentParser(description='PyTorch Convolutional Image \
     Captioning Model -- Caption Me')
 
 parser.add_argument('--model_dir', default='model', help='output directory to save models & results')
-parser.add_argument('--image_dir', default='images', help='directory containing input images \
+parser.add_argument('--image_dir', default='input', help='directory containing input images \
                     supported formats .png, .jpg, .jpeg, .JPG')
 
 parser.add_argument('-g', '--gpu', type=int, default=0,\
