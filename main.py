@@ -11,7 +11,7 @@ from test_beam import test_beam
   
 parser = argparse.ArgumentParser(description='PyTorch Convolutional Image Captioning Model')
 
-parser.add_argument('model_dir', default='model', help='output directory to save models & results')
+parser.add_argument('model_dir', help='output directory to save models & results')
 
 parser.add_argument('-g', '--gpu', type=int, default=0,\
                     help='gpu device id')
@@ -65,7 +65,7 @@ parser.add_argument('--optim_alg', type=str, default='RMSprop',\
                     help='optimization algorithm: Adam or RMSprop')
 
 parser.add_argument('--cnn', type=str, default='vgg16',\
-                    help='Pretrained CNN for feature extractio. vgg16 or vgg19bn')
+                    help='Pretrained CNN for feature extractio. vgg16, vgg19bn or resnet152')
 
 parser.set_defaults(attention=True)
 

@@ -8,7 +8,6 @@ import argparse
 import numpy as np
 import pickle 
 import time
-import json
  
 import torch
 import torch.nn as nn
@@ -23,18 +22,18 @@ from tqdm import tqdm
  
 from torchvision import models                                                                     
 from convcap import convcap
-from vggfeats import Vgg16Feats
-#from vgg19bnfeats import Vgg19bnFeats
+#from vggfeats import Vgg16Feats
+from resnet152 import Resnet152Feats
 from coco_loader import Scale
 from PIL import Image
-#from test_beam import repeat_img
+from test_beam import repeat_img
 from beamsearch import beamsearch 
 
 parser = argparse.ArgumentParser(description='PyTorch Convolutional Image \
     Captioning Model -- Caption Me')
 
-parser.add_argument('--model_dir', default='model', help='output directory to save models & results')
-parser.add_argument('--image_dir', default='input', help='directory containing input images \
+parser.add_argument('model_dir', help='output directory to save models & results')
+parser.add_argument('image_dir', help='directory containing input images \
                     supported formats .png, .jpg, .jpeg, .JPG')
 
 parser.add_argument('-g', '--gpu', type=int, default=0,\
@@ -42,17 +41,6 @@ parser.add_argument('-g', '--gpu', type=int, default=0,\
 
 parser.add_argument('--beam_size', type=int, default=1, \
                     help='beam size to use to generate captions') 
-
-parser.add_argument('--attention', dest='attention', action='store_true', \
-                    help='set caption model with attention in use (by default set)')
-
-parser.add_argument('--no-attention', dest='attention', action='store_false', \
-                    help='set caption model without attention in use')
-
-parser.add_argument('--cnn', type=str, default='vgg16',\
-                    help='Pretrained CNN for feature extractio. vgg16 or vgg19bn')
-
-parser.set_defaults(attention=True)
 
 args = parser.parse_args()
 
@@ -88,20 +76,17 @@ def captionme(args, modelfn):
   batchsize = 1
   max_tokens = 15
   num_layers = 3 
+  is_attention = True 
   worddict_tmp = pickle.load(open('data/wordlist.p', 'rb'))
   wordlist = [l for l in iter(worddict_tmp.keys()) if l != '</S>']
   wordlist = ['EOS'] + sorted(wordlist)
   numwords = len(wordlist)
 
-  #Load pre-trained imgcnn
-  if (args.cnn == 'vgg19bn'):
-    model_imgcnn = Vgg19bnFeats()
-  else:
-    model_imgcnn = Vgg16Feats()
-  
+  #model_imgcnn = Vgg16Feats()
+  model_imgcnn = Resnet152Feats()
   model_imgcnn.cuda() 
 
-  model_convcap = convcap(numwords, num_layers, is_attention = args.attention)
+  model_convcap = convcap(numwords, num_layers, is_attention = is_attention)
   model_convcap.cuda()
 
   print('[DEBUG] Loading checkpoint %s' % modelfn)
@@ -166,10 +151,6 @@ def captionme(args, modelfn):
         num_words = outcaps[j].index('EOS')
       outcap = ' '.join(outcaps[j][:num_words])
       pred_captions.append({'img_fn': img_fn, 'caption': outcap})
-  
-  #save predictions as dictionary
-  with open('images_captions.json', 'w') as file:
-   file.write(json.dumps(pred_captions))
 
   return pred_captions
 
@@ -182,10 +163,9 @@ def main():
     with open(resfile, 'w') as fp:
       for item in pred_captions:
         fp.write('image: %s, caption: %s\n' % (item['img_fn'], item['caption']))
-    print('[DEBUG] Captions written')
+    print('[DEBUG] Captions written to file %s' % resfile)
   else:
     raise Exception('No checkpoint found %s' % bestmodelfn)
 
 if __name__ == '__main__': 
   main()
-

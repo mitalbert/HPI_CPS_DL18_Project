@@ -21,8 +21,9 @@ from beamsearch import beamsearch
 from coco_loader import coco_loader
 from torchvision import models                                                                    
 from convcap import convcap
-from vggfeats import Vgg16Feats
-from vgg19bnfeats import Vgg19bnFeats
+#from vggfeats import Vgg16Feats
+#from resnet101 import Resnet101Feats
+from resnet152 import Resnet152Feats
 from evaluate import language_eval
 
 def repeat_img(args, img_emb):
@@ -50,13 +51,9 @@ def test_beam(args, split, modelfn=None):
   num_batches = np.int_(np.floor((len(data.ids)*1.)/batchsize))
   print('[DEBUG] Running test (w/ beam search) on %d batches' % num_batches)
   
-
-    #Load pre-trained imgcnn  
-  if (args.cnn == 'vgg19bn'):
-    model_imgcnn = Vgg19bnFeats()
-  else:
-    model_imgcnn = Vgg16Feats()
-  
+  #model_imgcnn = Vgg16Feats()
+  #model_imgcnn = Resnet101Feats()
+  model_imgcnn = Resnet152Feats()
   model_imgcnn.cuda() 
 
   model_convcap = convcap(data.numwords, args.num_layers, is_attention=args.attention)

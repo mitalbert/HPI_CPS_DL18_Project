@@ -34,7 +34,6 @@ class coco_loader(Dataset):
     self.split = split
     #Splits from http://cs.stanford.edu/people/karpathy/deepimagesent/caption_datasets.zip
     self.get_split_info('data/dataset_coco.json')
-    #self.get_split_info('data/dataset_flickr8k.json')
 
     worddict_tmp = pickle.load(open('data/wordlist.p', 'rb'))
     wordlist = [l for l in iter(worddict_tmp.keys()) if l != '</S>']
